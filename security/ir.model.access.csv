@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ges_votaciones_ges_votaciones,ges_votaciones.ges_votaciones,model_ges_votaciones_ges_votaciones,base.group_user,1,1,1,1
