@@ -51,19 +51,7 @@
                 <field name="votos"
                        attrs="{'invisible': [('tipo_persona', '=', 'estudiante')]}">
                 </field>
-            </field><!--
-
-            <page name="accounting_disabled" position="after">
-                <page string="Unidades de Negocio" >
-                    <field name="unidades_negocio"/>
-                </page>
-            </page>
-            <field name="carrera_del_estudiante" position="attributes">
-                <attribute name="readonly">0</attribute>
             </field>
-            <field name="sede_estudio_del_estudiante" position="attributes">
-                <attribute name="readonly">0</attribute>
-            </field>-->
 
         </field>
     </record>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--pestaña Identificacion-->
+        <record id="menu_identificacion_contacto" model="website.menu">
+            <field name="name">Menu Identificación</field>
+            <field name="url">/menu_identificacion</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">55</field>
+        </record>
+
+        <template id="form_identificarse" name="Formulario Identificación">
+            <t t-call="website.layout">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-4 col-md-6">
+                            <div class="card mt-5">
+                                <div class="card-body">
+                                    <h5 class="card-title text-center">Acceder al Portal</h5><br/>
+                                    <form class="login-form" role="form" action="/validacion/valido_identificacion" method="POST">
+                                        <div class="form-group">
+                                            <label for="vat" class="control-label">Número de Identificación</label>
+                                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                            <input type="text" name="vat" t-att-value="vat" id="vat"
+                                                   class="form-control" placeholder="1007895261" required="required"/>
+                                        </div><br/>
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary">Identificarse</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+
+        <!--Validacion exitosa - Esta me sirve para decir si el estudiante ya votó o no-->
+        <record id="estudiante_existente" model="website.page">
+            <field name="name">Estudiante existente</field>
+            <field name="type">qweb</field>
+            <field name="website_published">True</field>
+            <field name="key">ges_votaciones.estudiante_existente</field>
+            <field name="arch" type="xml">
+                <t name="Valido" t-name="ges_votaciones.estudiante_existente">
+                    <t t-call="website.layout">
+                        <div id="wrap">
+                            <div class="container">
+                                <h3>Encontrado</h3>
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div class="alert alert-success" role="status">
+                                            Validación exitosa ¡El estudiante existe dentro de los contactos!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </field>
+        </record>
+
+        <!--Validacion NO exitosa-->
+        <record id="estudiante_no_existente" model="website.page">
+            <field name="name">Estudiante no existente</field>
+            <field name="type">qweb</field>
+            <field name="website_published">True</field>
+            <field name="key">ges_votaciones.estudiante_no_existente</field>
+            <field name="arch" type="xml">
+                <t name="Valido" t-name="ges_votaciones.estudiante_no_existente">
+                    <t t-call="website.layout">
+                        <div id="wrap">
+                            <div class="container">
+                                <h3>No encontrado</h3>
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div class="alert alert-warning" role="status">
+                                            ¡El estudiante no existe dentro de los contactos!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </field>
+        </record>
+
+    </data>
+</odoo>

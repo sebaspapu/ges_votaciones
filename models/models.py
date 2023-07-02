@@ -87,26 +87,6 @@ class ProcesoVotaciones(models.Model):
 
     #votos_candidatos = fields.One2many('proceso.votaciones.votos', 'votacion_id', string='Cantidad de Votos por Candidato')
 
-
-    # Función para calcular la cantidad de votos
-    """@api.depends('candidatos')
-    def _compute_cantidad_votos(self):
-        for votacion in self:
-            print("votacion: ", votacion)
-            candidatos_res_part = votacion.candidatos
-            print("candidatos_respartner: ", candidatos_res_part)
-            for candidatos_de_votacion in candidatos_res_part:
-                print(f"candidato con id {candidatos_de_votacion}")
-                mapeado_lista = candidatos_de_votacion.mapped('votos')
-                print("mapeado_lista: ", mapeado_lista)
-                cantidad_registros = len(mapeado_lista)
-            #if cantidad_registros for rec_2 in cantidad_registros
-            print("cantidad de registros: ", cantidad_registros)
-            #votacion.cantidad_votos = cantidad_registros
-            #candidatos = votacion.candidatos
-            votacion.cantidad_votos = cantidad_registros"""
-
-
     # Acciones para cambiar el estado de la votación
     #def action_iniciar_votacion(self):
     #    self.estado = 'en_proceso'
@@ -141,18 +121,12 @@ class ProcesoVotaciones(models.Model):
         notificacion = 'Votaciones en borrador ' + str(registros)
         print(notificacion)
 
-    # modelo para representar los votos
-    """class Votos(models.Model):
-        _name = 'proceso.votaciones.votos'
-    
-        votacion_id = fields.Many2one('proceso.votaciones', string='Votación')
-        candidato_id = fields.Many2one('res.partner', string='Candidato')
-        cantidad_votos = fields.Integer(string='Cantidad de Votos', compute='_compute_cantidad_votos')
-        foto_candidato = fields.Binary(string='Foto del Candidato')
-    
-        # Función para calcular la cantidad de votos
-        @api.depends('votacion_id')
-        def _compute_cantidad_votos(self):
-            for voto in self:
-                print("voto: ", voto)
-                voto.cantidad_votos = self.env['res.partner'].search_count([('tipo_persona', '=', 'estudiante'),('voto', '=', voto.votacion_id.id)])"""
+#modelo para registrar los votos
+class registro_votos(models.Model):
+    _name = 'registro.votos'
+    _description = 'Registrar Votos'
+
+    proceso_votacion_seleccionado = fields.Char(string='Proceso de Votacion Seleccionado')
+    candidato_seleccionado = fields.Char(string='Candidato Seleccionado')
+    votos = fields.Integer(string='Cantidad de Votos')
+

@@ -5,13 +5,13 @@
         <!-- ################# VISTAS ################# -->
 
         <!-- vista de lista -->
-
         <record model="ir.ui.view" id="proceso_votaciones_tree_view">
             <field name="name">votacion.tree</field>
             <field name="model">proceso.votaciones</field>
             <field name="arch" type="xml">
                 <tree decoration-success="estado=='en_proceso'"
                       decoration-warning="estado=='cerrada'">
+                    <field name="id"/>
                     <field name="descripcion"/>
                     <field name="fecha_inicio"/>
                     <field name="fecha_fin"/>
@@ -83,6 +83,8 @@
           <field name="view_mode">tree,form</field>
         </record>
 
+        <!-- Acciones para iniciar estados de votación -->
+
         <record id="button_en_borrador" model="ir.actions.server">
                 <field name="name">Votación en Borrador</field>
                 <field name="binding_model_id" ref="ges_votaciones.model_proceso_votaciones"/>
@@ -113,7 +115,7 @@
 
         <!-- actions -->
 
-        <menuitem name="Procesos" id="proceso_votaciones_menu_1_sedes" parent="votaciones_universidad"
+        <menuitem name="Procesos" id="proceso_votaciones_menu_1" parent="votaciones_universidad"
                   action="proceso_votaciones_action_window" sequence="0"/>
 
 

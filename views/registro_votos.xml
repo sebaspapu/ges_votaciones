@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ################# VISTAS ################# -->
+
+        <!-- vista de lista -->
+        <record model="ir.ui.view" id="registro_votos_tree_view">
+            <field name="name">registro.votos.tree</field>
+            <field name="model">registro.votos</field>
+            <field name="arch" type="xml">
+                <tree >
+                    <field name="id"/>
+                    <field name="proceso_votacion_seleccionado"/>
+                    <field name="candidato_seleccionado"/>
+                    <field name="votos"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- ################# ACCIONES ################# -->
+
+        <!-- actions opening views on models -->
+
+        <!-- Acción para Sedes de la Universidad -->
+        <record model="ir.actions.act_window" id="registro_votos_action_window">
+          <field name="name">Registro de Votos</field>
+          <field name="res_model">registro.votos</field>
+          <field name="view_mode">tree</field>
+        </record>
+
+        <!-- menu categories -->
+
+        <!--<menuitem name="Votaciones" id="votaciones_universidad" parent="menu_main_gestor_votaciones" sequence="1"/>-->
+
+        <!-- actions -->
+
+        <menuitem name="Votos" id="registro_votos_menu_2" parent="votaciones_universidad"
+                  action="registro_votos_action_window" sequence="1"/>
+
+    </data>
+</odoo>

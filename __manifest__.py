@@ -34,8 +34,9 @@
         'views/proceso_votaciones.xml',
         'views/templates.xml',
         'views/res_config_settings.xml',
-        #'views/website_identificacion.xml',
-        #'views/website_votacion.xml',
+        'views/website_identificacion.xml',
+        'views/website_votacion.xml',
+        'views/registro_votos.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

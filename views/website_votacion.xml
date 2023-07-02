@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- formulario de identificacion para el estudiante -->
+        <template id="form_votacion" name="Formulario Identificación">
+            <t t-call="website.layout">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-4 col-md-6">
+                            <div class="card mt-5">
+                                <div class="card-body">
+                                    <t t-foreach='busqueda_num_id_rec' t-as="busqueda_num_id">
+                                        <h5 class="card-title text-center">¡BIENVENIDO ESTUDIANTE <br/><t t-esc='busqueda_num_id.name'/>!</h5>
+                                    </t>
+                                    <h6 class="card-title text-center">¡Por favor, diligencie los campos y registre su voto!</h6><br/>
+                                    <form role="form" action="/votacion/formulario" method="POST">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                                        <!-- campo seleccionable de procesos de votacion disponibles 'votaciones disponibles'-->
+                                        <div class="form-group">
+                                            <label for="id_votacion_seleccionada" class="control-label">Votaciones disponibles</label>
+                                            <select name="id_votacion_seleccionada" class="form-control link-style">
+                                                <t t-foreach='procesos_votacion_rec' t-as="procesos_votacion">
+                                                    <option t-esc='procesos_votacion.descripcion' t-att-value='procesos_votacion.id'/>
+                                                </t>
+                                            </select>
+                                        </div>
+
+                                        <!-- campo seleccionable de todos los candidatos disponibles 'Candidatos disponibles'-->
+                                        <div class="form-group"><br/>
+                                            <label for="id_candidato_seleccionado" class="control-label">Candidatos disponibles</label>
+                                            <select name="id_candidato_seleccionado" class="form-control link-style">
+                                                <t t-foreach='candidatos_disponibles_rec' t-as="candidatos_disponibles">
+                                                    <option t-esc='candidatos_disponibles.name' t-att-value='candidatos_disponibles.id'/>
+                                                </t>
+                                            </select>
+                                        </div>
+
+                                        <div class="text-center"><br/>
+                                            <button type="submit" class="btn btn-primary">Finalizar votación</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!--El voto a sido registrado correctamente-->
+        <record id="voto_exitoso" model="website.page">
+            <field name="name">Voto éxitoso</field>
+            <field name="type">qweb</field>
+            <field name="website_published">True</field>
+            <field name="key">ges_votaciones.voto_exitoso</field>
+            <field name="arch" type="xml">
+                <t name="Valido" t-name="ges_votaciones.voto_exitoso">
+                    <t t-call="website.layout">
+                        <div id="wrap">
+                            <div class="container">
+                                <h3>Votación completada</h3>
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div class="alert alert-success" role="status">
+                                            Votación exitosa ¡Se ha registrado su voto!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </field>
+        </record>
+
+        <!--El candidato no existe en ese proceso de votacion-->
+        <record id="voto_no_exitoso" model="website.page">
+            <field name="name">Voto no éxitoso</field>
+            <field name="type">qweb</field>
+            <field name="website_published">True</field>
+            <field name="key">ges_votaciones.voto_no_exitoso</field>
+            <field name="arch" type="xml">
+                <t name="Valido" t-name="ges_votaciones.voto_no_exitoso">
+                    <t t-call="website.layout">
+                        <div id="wrap">
+                            <div class="container">
+                                <h3>Votación incompleta</h3>
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div class="alert alert-warning" role="status">
+                                            ¡El candidato no existe en ese proceso de votacion!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>
