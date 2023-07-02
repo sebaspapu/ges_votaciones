@@ -1,0 +1,92 @@
+<odoo>
+  <data>
+
+    <!-- Pestaña principal -->
+
+    <menuitem name="Gestor Votaciones"
+          id="menu_main_gestor_votaciones"
+          web_icon="ges_votaciones,static/description/icon.svg"
+          sequence="70"/>
+
+    <!-- ################# VISTAS ################# -->
+
+    <!-- vista de lista - sedes de la universidad -->
+    <record model="ir.ui.view" id="sedes_universidad_tree_view">
+      <field name="name">sedes de la universidad</field>
+      <field name="model">sedes.universidad</field>
+      <field name="arch" type="xml">
+        <tree editable="bottom">
+            <field name="create_date"/>
+          <field name="nombre_sede"/>
+            <field name="ubicacion_sede"/>
+          <field name="universidad_principal"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- vista form - herencia modulo contactos -->
+    <record model="ir.ui.view" id="estudiantes_universidad_inherit" >
+        <field name="name">res.partner.estudiantes.universidad</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="vat" position="after">
+                <field name="tipo_persona">
+                </field>
+            </field>
+            <field name="vat" position="after">
+                <field name="country_name" invisible="1">
+                </field>
+            </field>
+            <field name="tipo_persona" position="after">
+                <field name="carrera_del_estudiante" attrs="{'readonly': [('tipo_persona', '=', 'candidato')]}">
+                </field>
+            </field>
+            <field name="carrera_del_estudiante" position="after">
+                <field name="sede_estudio_del_estudiante"
+                       attrs="{'readonly': [('tipo_persona', '=', 'candidato')]}">
+                </field>
+            </field>
+            <field name="sede_estudio_del_estudiante" position="after">
+                <field name="votos"
+                       attrs="{'invisible': [('tipo_persona', '=', 'estudiante')]}">
+                </field>
+            </field><!--
+
+            <page name="accounting_disabled" position="after">
+                <page string="Unidades de Negocio" >
+                    <field name="unidades_negocio"/>
+                </page>
+            </page>
+            <field name="carrera_del_estudiante" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </field>
+            <field name="sede_estudio_del_estudiante" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </field>-->
+
+        </field>
+    </record>
+
+    <!-- ################# ACCIONES ################# -->
+
+    <!-- actions opening views on models -->
+
+    <!-- Acción para Sedes de la Universidad -->
+    <record model="ir.actions.act_window" id="sedes_universidad_action_window">
+      <field name="name">Sedes de la Universidad</field>
+      <field name="res_model">sedes.universidad</field>
+      <field name="view_mode">tree</field>
+    </record>
+
+    <!-- menu categories -->
+
+    <menuitem name="Universidad" id="sedes_universidad" parent="menu_main_gestor_votaciones" sequence="0"/>
+
+    <!-- actions -->
+
+    <menuitem name="Sedes" id="sedes_universidad_menu_1_sedes" parent="sedes_universidad"
+              action="sedes_universidad_action_window" sequence="0"/>
+
+  </data>
+</odoo>

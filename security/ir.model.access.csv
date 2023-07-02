@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_ges_votaciones_ges_votaciones,ges_votaciones.ges_votaciones,model_ges_votaciones_ges_votaciones,base.group_user,1,1,1,1
+access_sedes_universidad,sedes.universidad,model_sedes_universidad,base.group_user,1,1,1,1
+access_proceso_votaciones,proceso.votaciones,model_proceso_votaciones,base.group_user,1,1,1,1

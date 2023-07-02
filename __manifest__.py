@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "ges_votaciones",
+    'name': "Gestor Votaciones",
 
-    'summary': """Sistema de Votaciones""",
+    'summary': 'Sistema de Votaciones',
 
     'description': """
         Permite gestionar y administrar un sistema de votaciones para diferentes sedes de una Universidad,
-        Los Contactos ingresan a traves de un portal web, y realizan todo el proceso.
-    """,
+        Los Contactos ingresan a traves de un portal web, y realizan todo el proceso.""",
 
     'author': "Sebastián Bolaños Morales",
     'website': "https://github.com/sebaspapu",
@@ -19,13 +18,24 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base'],
+    'depends': ['base',
+                'contacts',
+                'l10n_co',
+                'website'
+                ],
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
-        'views/views.xml',
+        # archivo permiso de accesos
+        'security/ir.model.access.csv',
+
+        # vistas principales
+        'views/sedes_and_inherit.xml',
+        'views/proceso_votaciones.xml',
         'views/templates.xml',
+        'views/res_config_settings.xml',
+        #'views/website_identificacion.xml',
+        #'views/website_votacion.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

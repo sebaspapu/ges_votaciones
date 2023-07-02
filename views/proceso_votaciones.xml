@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ################# VISTAS ################# -->
+
+        <!-- vista de lista -->
+
+        <record model="ir.ui.view" id="proceso_votaciones_tree_view">
+            <field name="name">votacion.tree</field>
+            <field name="model">proceso.votaciones</field>
+            <field name="arch" type="xml">
+                <tree decoration-success="estado=='en_proceso'"
+                      decoration-warning="estado=='cerrada'">
+                    <field name="descripcion"/>
+                    <field name="fecha_inicio"/>
+                    <field name="fecha_fin"/>
+                    <field name="estado"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- vista form -->
+        <record model="ir.ui.view" id="proceso_votaciones_form_view">
+            <field name="name">votacion.form</field>
+            <field name="model">proceso.votaciones</field>
+            <field name="arch" type="xml">
+                <form string="Proceso de Votación">
+                    <sheet>
+                        <group>
+                            <field name="descripcion" attrs="{'readonly':[('estado','in',['cerrada'] )]}"/>
+                            <!--<field name="fecha_inicio"/>
+                            <field name="fecha_fin"/>-->
+
+                            <label for="fecha_inicio" string="Fechas de Consulta"/>
+                            <div class="o_row">
+                                <field name="fecha_inicio" nolabel="1" widget="daterange" options="{'related_end_date': 'fecha_fin'}" attrs="{'readonly':[('estado','in',['cerrada'] )]}"/>
+                                    <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow"/>
+                                <field name="fecha_fin"  nolabel="1" widget="daterange" options="{'related_start_date': 'fecha_inicio'}" attrs="{'readonly':[('estado','in',['cerrada'] )]}"/>
+                            </div>
+
+                            <!--<field name="candidatos"/>-->
+                            <field name="candidatos" attrs="{'readonly':[('estado','in',['cerrada'] )]}">
+                                <tree >
+                                    <field name="id"/>
+                                    <field name="name"/>
+                                    <field name="vat"/>
+                                    <field name="country_name"/>
+                                    <field name="tipo_persona"/>
+                                    <!--<field name="votos"/> NO ACTIVAR ESTE CAMPO-->
+                                    <!--<field name="nombre_del_campo_foto_candidato" widget="image" options="{'no_auto_resize': True}"/>
+                                --></tree>
+                            </field>
+                            <!--<field name="cantidad_votos" readonly="1"/>-->
+                            <field name="foto_candidato" attrs="{'readonly':[('estado','in',['cerrada'] )]}"/>
+                            <field name="estado" attrs="{'readonly':[('estado','in',['cerrada'] )]}"/>
+                        </group>
+                        <!-- Campo One2many de Cantidad de votos por candidato - (de momento esto no va)
+                        <notebook>
+                            <page string="Cantidad de Votos por Candidato">
+                                <field name="votos_candidatos" mode="tree">
+                                    <tree editable="bottom">
+                                        <field name="candidato_id"/>
+                                        <field name="cantidad_votos"/>
+                                        <field name="foto_candidato" widget="image" options="{'no_auto_resize': True}"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>-->
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- ################# ACCIONES ################# -->
+
+        <!-- actions opening views on models -->
+
+        <!-- Acción para Sedes de la Universidad -->
+        <record model="ir.actions.act_window" id="proceso_votaciones_action_window">
+          <field name="name">Procesos de Votaciones</field>
+          <field name="res_model">proceso.votaciones</field>
+          <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="button_en_borrador" model="ir.actions.server">
+                <field name="name">Votación en Borrador</field>
+                <field name="binding_model_id" ref="ges_votaciones.model_proceso_votaciones"/>
+                <field name="model_id" ref="ges_votaciones.model_proceso_votaciones"/>
+                <field name="state">code</field>
+                <field name="code">action=records.votacion_en_borrador()</field>
+        </record>
+
+        <record id="button_en_proceso" model="ir.actions.server">
+                <field name="name">Iniciar Votación</field>
+                <field name="binding_model_id" ref="ges_votaciones.model_proceso_votaciones"/>
+                <field name="model_id" ref="ges_votaciones.model_proceso_votaciones"/>
+                <field name="state">code</field>
+                <field name="code">action=records.votacion_en_proceso()</field>
+        </record>
+
+        <record id="button_cerrada" model="ir.actions.server">
+                <field name="name">Cerrar Votación</field>
+                <field name="binding_model_id" ref="ges_votaciones.model_proceso_votaciones"/>
+                <field name="model_id" ref="ges_votaciones.model_proceso_votaciones"/>
+                <field name="state">code</field>
+                <field name="code">action=records.votacion_cerrada()</field>
+        </record>
+
+        <!-- menu categories -->
+
+        <menuitem name="Votaciones" id="votaciones_universidad" parent="menu_main_gestor_votaciones" sequence="1"/>
+
+        <!-- actions -->
+
+        <menuitem name="Procesos" id="proceso_votaciones_menu_1_sedes" parent="votaciones_universidad"
+                  action="proceso_votaciones_action_window" sequence="0"/>
+
+
+    </data>
+</odoo>

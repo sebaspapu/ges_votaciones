@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="res_config_settings_view_form_ges_votaciones" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.ges.votaciones</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="25"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('settings')]" position="inside">
+                    <div class="app_settings_block" data-string="Gestor_de_Votaciones" string="Gestor de Votaciones"
+                         data-key="ges_votaciones" groups="base.group_erp_manager">
+                        <h2>Configuraciones Generales</h2>
+                        <div class="row mt16 o_settings_container" name="ges_votaciones_setting_container">
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div>
+
+                                    <div>
+                                        <div>
+                                            <label for="creador"/>
+                                            <field name="creador"/>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="action_ges_votaciones_configuration" model="ir.actions.act_window">
+            <field name="name">Ajustes</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module' : 'ges_votaciones'}</field>
+        </record>
+
+        <menuitem id="menu_ges_votaciones_settings" name="Ajustes" parent="menu_main_gestor_votaciones"
+                  action="action_ges_votaciones_configuration" groups="base.group_system"/>
+
+
+    </data>
+</odoo>
