@@ -10,10 +10,48 @@
             <field name="arch" type="xml">
                 <tree >
                     <field name="id"/>
+                    <field name="proceso_votacion_seleccionado_objeto" invisible="1"/>
                     <field name="proceso_votacion_seleccionado"/>
                     <field name="candidato_seleccionado"/>
                     <field name="votos"/>
+                    <field name="foto_candidato"/>
                 </tree>
+            </field>
+        </record>
+
+        <!-- vista pivot registro votos -->
+        <record id="estadisticas_registro_votos_view_pivot" model="ir.ui.view">
+            <field name="name">Cantidad Votos Por Candidato</field>
+            <field name="model">registro.votos</field>
+            <field name="priority">60</field>
+            <field name="arch" type="xml">
+                <pivot string="Analisis de Estadisticas - Votos Por Candidato" sample="1">
+                    <field name="proceso_votacion_seleccionado" type="row"/>
+                    <field name="candidato_seleccionado" interval="day" type="row"/><!-- validar lo del interval-->
+                    <field name="votos" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- vista search registro votos -->
+        <!-- ==================== vista de busqueda, para agrupaciones ====================-->
+        <record id="agrupacion_registro_votos_search" model="ir.ui.view">
+            <field name="name">Agrupación Registro de Votos - view search</field>
+            <field name="model">registro.votos</field>
+            <field name="arch" type="xml">
+                <search string="Busqueda por grupos">
+                    <field name="id"/>
+                    <field name="proceso_votacion_seleccionado_objeto" invisible="1"/>
+                    <field name="proceso_votacion_seleccionado"/>
+                    <field name="candidato_seleccionado"/>
+                    <field name="votos"/>
+                    <field name="foto_candidato"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Proceso de Votación" name="groupby_proceso_votacion_seleccionado" domain="[]" context="{'group_by': 'proceso_votacion_seleccionado'}"/>
+                        <filter string="Candidato" name="groupby_proceso_candidato_seleccionado" domain="[]" context="{'group_by': 'candidato_seleccionado'}"/>
+                    </group>
+                </search>
             </field>
         </record>
 
@@ -25,7 +63,12 @@
         <record model="ir.actions.act_window" id="registro_votos_action_window">
           <field name="name">Registro de Votos</field>
           <field name="res_model">registro.votos</field>
-          <field name="view_mode">tree</field>
+          <field name="view_mode">tree,pivot,search</field>
+            <!-- agrupacion -->
+            <field name="context">{
+                'search_default_groupby_proceso_votacion_seleccionado':1,
+                'search_default_groupby_proceso_candidato_seleccionado':1,
+            }</field>
         </record>
 
         <!-- menu categories -->

@@ -34,12 +34,17 @@ class EstudiantesYCandidatosUniversidad(models.Model):
     sede_estudio_del_estudiante = fields.Many2one('sedes.universidad', string='Sede de Estudio',
                                                   domain="[('ubicacion_sede', '=', country_name)]")
     country_name = fields.Integer(string='Nombre del País', related='country_id.id', readonly=True)
-    vat = fields.Char("Número de Identificación Custom")
+    country_id = fields.Many2one(required=True)
+    vat = fields.Char("Número de Identificación Custom", required=True)
     tipo_persona = fields.Selection([
         ('estudiante', 'Estudiante'),
         ('candidato', 'Candidato')],
-        string='Tipo de Persona', default='')
+        string='Tipo de Persona', default='', required=True)
     votos = fields.One2many('proceso.votaciones', 'candidatos', string='Votos')
+
+    voto_realizado = fields.Selection([
+        ('si', 'SI'),
+        ('no', 'NO')], string="¿Ha participado en un proceso de votación?", default='no')
 
     # Funciones
 
@@ -65,7 +70,7 @@ class EstudiantesYCandidatosUniversidad(models.Model):
             if contacto_existente:
                 raise ValidationError("Ya existe una persona con el mismo número de identificación.")
 
-#crear los procesos de votaciones
+# crear los procesos de votaciones
 class ProcesoVotaciones(models.Model):
     _name = 'proceso.votaciones'
     _description = 'Proceso de Votación'
@@ -78,18 +83,15 @@ class ProcesoVotaciones(models.Model):
     # le paso los candidatos a traves de un campo Many2many, ya que una Votacion puede tener muchos candidatos, y un candidato puede estar en muchas Votaciones
     candidatos = fields.Many2many('res.partner', string='Candidatos', domain=[('tipo_persona', '=', 'candidato')])
     #cantidad_votos = fields.Integer(string='Cantidad de Votos')#, compute='_compute_cantidad_votos')
-    foto_candidato = fields.Binary(string='Foto del Candidato') # la foto del candidato hay que traerla tambien de acuerdo al candidato que se seleccione ARREGLAR
+    #foto_candidato = fields.Binary(string='Foto del Candidato') # la foto del candidato hay que traerla tambien de acuerdo al candidato que se seleccione ARREGLAR
     estado = fields.Selection([
         ('borrador', 'Borrador'),
         ('en_proceso', 'En Proceso'),
         ('cerrada', 'Cerrada')
     ], string='Estado', default='borrador')
 
-    #votos_candidatos = fields.One2many('proceso.votaciones.votos', 'votacion_id', string='Cantidad de Votos por Candidato')
-
-    # Acciones para cambiar el estado de la votación
-    #def action_iniciar_votacion(self):
-    #    self.estado = 'en_proceso'
+    # Relación One2many con el modelo 'registro.votos'
+    votos_registrados = fields.One2many('registro.votos', 'proceso_votacion_seleccionado_objeto', string='Votos Registrados')
 
     #votacion iniciada o en proceso, posterior a cuando se ha creado
     def votacion_en_proceso(self):
@@ -121,12 +123,16 @@ class ProcesoVotaciones(models.Model):
         notificacion = 'Votaciones en borrador ' + str(registros)
         print(notificacion)
 
-#modelo para registrar los votos
+# modelo para registrar los votos
 class registro_votos(models.Model):
     _name = 'registro.votos'
     _description = 'Registrar Votos'
 
+    #conexion con modelo proceso.votaciones
+    proceso_votacion_seleccionado_objeto = fields.Many2one('proceso.votaciones', string="contiene el objeto proceso_votacion")
+
     proceso_votacion_seleccionado = fields.Char(string='Proceso de Votacion Seleccionado')
     candidato_seleccionado = fields.Char(string='Candidato Seleccionado')
     votos = fields.Integer(string='Cantidad de Votos')
+    foto_candidato = fields.Binary(string='Foto del Candidato')
 

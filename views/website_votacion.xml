@@ -36,7 +36,9 @@
                                                 </t>
                                             </select>
                                         </div>
-
+                                        <!-- Campos ocultos con valor fijo -->
+                                        <input type="hidden" name="busqueda_num_id_rec" t-att-value="busqueda_num_id_rec.id"/>
+                                        <!-- boton que valida la información del formulario-->
                                         <div class="text-center"><br/>
                                             <button type="submit" class="btn btn-primary">Finalizar votación</button>
                                         </div>
@@ -60,7 +62,7 @@
                     <t t-call="website.layout">
                         <div id="wrap">
                             <div class="container">
-                                <h3>Votación completada</h3>
+                                <h5><br/>¡VOTACIÓN COMPLETA!</h5>
                                 <div class="row">
                                     <div class="col-lg-8">
                                         <div class="alert alert-success" role="status">
@@ -86,7 +88,7 @@
                     <t t-call="website.layout">
                         <div id="wrap">
                             <div class="container">
-                                <h3>Votación incompleta</h3>
+                                <h5><br/>¡VOTACIÓN INCOMPLETA!</h5>
                                 <div class="row">
                                     <div class="col-lg-8">
                                         <div class="alert alert-warning" role="status">

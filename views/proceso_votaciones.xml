@@ -45,28 +45,31 @@
                                     <field name="id"/>
                                     <field name="name"/>
                                     <field name="vat"/>
-                                    <field name="country_name"/>
+                                    <field name="country_id" string="Pais"/>
                                     <field name="tipo_persona"/>
                                     <!--<field name="votos"/> NO ACTIVAR ESTE CAMPO-->
                                     <!--<field name="nombre_del_campo_foto_candidato" widget="image" options="{'no_auto_resize': True}"/>
                                 --></tree>
                             </field>
                             <!--<field name="cantidad_votos" readonly="1"/>-->
-                            <field name="foto_candidato" attrs="{'readonly':[('estado','in',['cerrada'] )]}"/>
+                            <!--<field name="foto_candidato" attrs="{'readonly':[('estado','in',['cerrada'] )]}"/>-->
                             <field name="estado" attrs="{'readonly':[('estado','in',['cerrada'] )]}"/>
                         </group>
-                        <!-- Campo One2many de Cantidad de votos por candidato - (de momento esto no va)
+                        <!-- Campo One2many de Cantidad de votos por candidato - (de momento esto no va)-->
                         <notebook>
                             <page string="Cantidad de Votos por Candidato">
-                                <field name="votos_candidatos" mode="tree">
-                                    <tree editable="bottom">
-                                        <field name="candidato_id"/>
-                                        <field name="cantidad_votos"/>
-                                        <field name="foto_candidato" widget="image" options="{'no_auto_resize': True}"/>
+                                <field name="votos_registrados" readonly="1">
+                                    <tree >
+                                        <!--<field name="id"/>-->
+                                        <!--<field name="proceso_votacion_seleccionado_objeto" invisible="1"/>
+                                        <field name="proceso_votacion_seleccionado"/>-->
+                                        <field name="candidato_seleccionado" string="Candidato"/>
+                                        <field name="votos"/>
+                                        <field name="foto_candidato" widget="image"/>
                                     </tree>
                                 </field>
                             </page>
-                        </notebook>-->
+                        </notebook>
                     </sheet>
                 </form>
             </field>
