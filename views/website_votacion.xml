@@ -2,8 +2,8 @@
 <odoo>
     <data>
 
-        <!-- formulario de identificacion para el estudiante -->
-        <template id="form_votacion" name="Formulario Identificación">
+        <!-- formulario de votación para el estudiante -->
+        <template id="form_votacion" name="Formulario Votación Website">
             <t t-call="website.layout">
                 <div class="container">
                     <div class="row justify-content-center">

@@ -2,3 +2,4 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_sedes_universidad,sedes.universidad,model_sedes_universidad,base.group_user,1,1,1,1
 access_proceso_votaciones,proceso.votaciones,model_proceso_votaciones,base.group_user,1,1,1,1
 access_registro_votos,registro.votos,model_registro_votos,base.group_user,1,1,1,1
+access_votacion_import_wizard,votacion.import.wizard,model_votacion_import_wizard,base.group_user,1,1,1,1

@@ -37,10 +37,15 @@
         'views/website_identificacion.xml',
         'views/website_votacion.xml',
         'views/registro_votos.xml',
+
+        #wizards
+        'wizards/view_importar.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
         'demo/demo.xml',
     ],
+
+    'license': 'LGPL-3',
 }
 

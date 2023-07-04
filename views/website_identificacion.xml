@@ -10,7 +10,7 @@
             <field name="sequence">55</field>
         </record>
 
-        <template id="form_identificarse" name="Formulario Identificación">
+        <template id="form_identificarse" name="Login Identificación Website">
             <t t-call="website.layout">
                 <div class="container">
                     <div class="row justify-content-center">
@@ -36,7 +36,6 @@
                 </div>
             </t>
         </template>
-
 
         <!--Validacion exitosa - Esta me sirve para decir si el estudiante ya votó o no-->
         <record id="estudiante_existente" model="website.page">
@@ -92,7 +91,7 @@
 
         <!--Validacion NO exitosa - El estudiante ya ha realizado una votación antes-->
         <record id="estudiante_ha_votado" model="website.page">
-            <field name="name">Estudiante no puede volver a votar</field>
+            <field name="name">Estudiante ha realizado una votación antes</field>
             <field name="type">qweb</field>
             <field name="website_published">True</field>
             <field name="key">ges_votaciones.estudiante_ha_votado</field>
@@ -106,6 +105,84 @@
                                     <div class="col-lg-8">
                                         <div class="alert alert-warning" role="status">
                                             ¡El estudiante ya tiene un voto registrado!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </field>
+        </record>
+
+        <!--Validacion NO exitosa - No hay ningun contacto creado como estudiante-->
+        <record id="no_hay_estudiante_de_ese_tipo" model="website.page">
+            <field name="name">No hay ningun contacto creado como estudiante</field>
+            <field name="type">qweb</field>
+            <field name="website_published">True</field>
+            <field name="key">ges_votaciones.no_hay_estudiante_de_ese_tipo</field>
+            <field name="arch" type="xml">
+                <t name="Valido" t-name="ges_votaciones.no_hay_estudiante_de_ese_tipo">
+                    <t t-call="website.layout">
+                        <div id="wrap">
+                            <div class="container">
+                                <h5><br/>¡NO ES VÁLIDO!</h5>
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div class="alert alert-warning" role="status">
+                                            ¡No hay ningún contacto creado como estudiante!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </field>
+        </record>
+
+        <!--Validacion NO exitosa - Aún no se han creado procesos de votación -->
+        <record id="no_hay_procesos_de_votacion" model="website.page">
+            <field name="name">Aún no se han creado procesos de votación</field>
+            <field name="type">qweb</field>
+            <field name="website_published">True</field>
+            <field name="key">ges_votaciones.no_hay_procesos_de_votacion</field>
+            <field name="arch" type="xml">
+                <t name="Valido" t-name="ges_votaciones.no_hay_procesos_de_votacion">
+                    <t t-call="website.layout">
+                        <div id="wrap">
+                            <div class="container">
+                                <h5><br/>¡Formulario con información incompleta!</h5>
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div class="alert alert-warning" role="status">
+                                            ¡Aún no se han creado procesos de votación!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </field>
+        </record>
+
+        <!--Validacion NO exitosa - Aún no hay candidatos disponibles -->
+        <record id="no_hay_candidatos_disponibles" model="website.page">
+            <field name="name">Aún no hay candidatos disponibles</field>
+            <field name="type">qweb</field>
+            <field name="website_published">True</field>
+            <field name="key">ges_votaciones.no_hay_candidatos_disponibles</field>
+            <field name="arch" type="xml">
+                <t name="Valido" t-name="ges_votaciones.no_hay_candidatos_disponibles">
+                    <t t-call="website.layout">
+                        <div id="wrap">
+                            <div class="container">
+                                <h5><br/>¡Formulario con información incompleta!</h5>
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div class="alert alert-warning" role="status">
+                                            ¡Aún no hay candidatos disponibles!
                                         </div>
                                     </div>
                                 </div>

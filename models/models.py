@@ -123,6 +123,12 @@ class ProcesoVotaciones(models.Model):
         notificacion = 'Votaciones en borrador ' + str(registros)
         print(notificacion)
 
+    #boton que inicia la accion que contiene ejecuta la vista del wizard
+    #def abrir_wizard_importacion(self):
+    #    view_id = self.env.ref('ges_votaciones.action_wizard_importar')
+    #    action = view_id.read()[0]
+    #    return action
+
 # modelo para registrar los votos
 class registro_votos(models.Model):
     _name = 'registro.votos'
