@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import odoo
 from odoo import http
 from odoo.http import request
 
@@ -41,28 +42,46 @@ class ProcesoVotacionSitioWeb(http.Controller):
                     if estado_su_voto == 'no':
                         print("El estudiante aún no ha votado")
 
-                        #le envio el modelo que contiene todos los procesos de votacion
-                        procesos_votacion_rec = request.env['proceso.votaciones'].sudo().search([])
-                        print("Objeto con id de todos los procesos de votacion: ", procesos_votacion_rec)
+                        # buscar por el id la sede asociada
+                        buscando_sede = rec.sede_estudio_del_estudiante
+                        print("busco la sede de estudio: ", buscando_sede)
+                        fecha_inicio_sede = buscando_sede.fecha_inicio
+                        fecha_fin_sede = buscando_sede.fecha_fin
+                        print("\nfecha inicio: ", fecha_inicio_sede, "fecha fin: ",fecha_fin_sede)
+                        fecha_actual_votacion = odoo.fields.Datetime.now()
+                        print("fecha actual: ", fecha_actual_votacion)
+                        if fecha_inicio_sede < fecha_actual_votacion and fecha_actual_votacion < fecha_fin_sede:
+                            print("La sede aun permite registrar votos")
 
-                        #le envio el modelo que contiene todos los candidatos disponibles
-                        candidatos_disponibles_rec = request.env['res.partner'].sudo().search([('tipo_persona','=','candidato')])
-                        print("Objeto con id de todos los candidatos: ",candidatos_disponibles_rec)
+                            # le envio el modelo que contiene todos los procesos de votacion
+                            procesos_votacion_rec = request.env['proceso.votaciones'].sudo().search([])
+                            print("Objeto con id de todos los procesos de votacion: ", procesos_votacion_rec)
 
-                        if procesos_votacion_rec:
-                            if candidatos_disponibles_rec:
+                            # le envio el modelo que contiene todos los candidatos disponibles
+                            candidatos_disponibles_rec = request.env['res.partner'].sudo().search(
+                                [('tipo_persona', '=', 'candidato')])
+                            print("Objeto con id de todos los candidatos: ", candidatos_disponibles_rec)
 
-                                # le muestro un mensaje de que el estudiante se encuentra: (luego cambiara)
-                                return http.request.render('ges_votaciones.form_votacion', {
-                                    'busqueda_num_id_rec':rec,
-                                    'procesos_votacion_rec': procesos_votacion_rec,
-                                    'candidatos_disponibles_rec': candidatos_disponibles_rec,
+                            if procesos_votacion_rec:
+                                if candidatos_disponibles_rec:
+
+                                    # le muestro un mensaje de que el estudiante se encuentra: (luego cambiara)
+                                    return http.request.render('ges_votaciones.form_votacion', {
+                                        'busqueda_num_id_rec': rec,
+                                        'procesos_votacion_rec': procesos_votacion_rec,
+                                        'candidatos_disponibles_rec': candidatos_disponibles_rec,
                                     })
+                                else:
+                                    plantilla_record = 'ges_votaciones.no_hay_candidatos_disponibles'
+                                    break
                             else:
-                                plantilla_record = 'ges_votaciones.no_hay_candidatos_disponibles'
+                                plantilla_record = 'ges_votaciones.no_hay_procesos_de_votacion'
                                 break
+                        elif fecha_actual_votacion < fecha_inicio_sede and fecha_actual_votacion < fecha_fin_sede:
+                            plantilla_record = 'ges_votaciones.sede_fuera_de_rango_sin_iniciar'
+                            break
                         else:
-                            plantilla_record = 'ges_votaciones.no_hay_procesos_de_votacion'
+                            plantilla_record = 'ges_votaciones.sede_fuera_de_rango_finalizada'
                             break
                     else:
                         plantilla_record = 'ges_votaciones.estudiante_ha_votado'
@@ -92,86 +111,98 @@ class ProcesoVotacionSitioWeb(http.Controller):
         estado_su_voto = busqueda_estudiante.voto_realizado
         print("estado del voto: ", estado_su_voto, type(estado_su_voto))
 
-        print("proceso de votacion: ", procesos_votacion_rec)
+        print("proceso de votacion: ", procesos_votacion_rec.estado,type(procesos_votacion_rec.estado))
 
-        cantidad_candidatos = procesos_votacion_rec.candidatos
+        #valido si el proceso de votación ya está cerrado
 
-        for rec_candidatos in cantidad_candidatos:
-            print("id candidatos: ", rec_candidatos)
-            if int(rec_candidatos.id) == id_candidato_seleccionado:
-                print("El candidato existe!\nredirigiendo...")
+        estado_proceso = procesos_votacion_rec.estado
 
-                #creemos el registro en el modelo: (Almaceno los objetos que contienen toda la informacion)
-                print("Almaceno el 'Objeto-id' del proceso de votacion: ", procesos_votacion_rec)
-                print("Almaceno el 'Objeto-id' del candidato seleccionado: ", rec_candidatos)
+        if estado_proceso == 'en_proceso':
 
-                #busco el proceso de seleccion para ver si ya existe, y no volver a crear un mismo proceso
-                busqueda_proceso_votacion = request.env['registro.votos'].sudo().search([
-                    ('proceso_votacion_seleccionado','=',procesos_votacion_rec.descripcion)])
-                print("busqueda_proceso_votacion: ", busqueda_proceso_votacion)
+            cantidad_candidatos = procesos_votacion_rec.candidatos
 
-                bandera = False
-                voto = 1
-                foto_candidato = rec_candidatos.image_1920
+            for rec_candidatos in cantidad_candidatos:
+                print("id candidatos: ", rec_candidatos)
+                if int(rec_candidatos.id) == id_candidato_seleccionado:
+                    print("El candidato existe!\nredirigiendo...")
 
-                if estado_su_voto == 'no':
-                    print("El estudiante aún no ha votado")
+                    #creemos el registro en el modelo: (Almaceno los objetos que contienen toda la informacion)
+                    print("Almaceno el 'Objeto-id' del proceso de votacion: ", procesos_votacion_rec)
+                    print("Almaceno el 'Objeto-id' del candidato seleccionado: ", rec_candidatos)
 
-                    # cambiar el estado de su voto
-                    payload_voto = {
-                       'voto_realizado': 'si',
-                    }
-                    busqueda_estudiante.write(payload_voto)
+                    #busco el proceso de seleccion para ver si ya existe, y no volver a crear un mismo proceso
+                    busqueda_proceso_votacion = request.env['registro.votos'].sudo().search([
+                        ('proceso_votacion_seleccionado','=',procesos_votacion_rec.descripcion)])
+                    print("busqueda_proceso_votacion: ", busqueda_proceso_votacion)
 
-                    payload_registro = {
-                        'proceso_votacion_seleccionado': procesos_votacion_rec.descripcion,
-                        'candidato_seleccionado': rec_candidatos.name,
-                        'votos': voto,
-                        'proceso_votacion_seleccionado_objeto': procesos_votacion_rec.id,
-                        'foto_candidato': foto_candidato
-                    }
+                    bandera = False
+                    voto = 1
+                    foto_candidato = rec_candidatos.image_1920
 
-                    #ya hay una votacion creada con este proceso de votacion
-                    # (esto me trae entonces una lista de id con todos los registros que tienen esa mismo proceso de votacion)
-                    if busqueda_proceso_votacion:
+                    if estado_su_voto == 'no':
+                        print("El estudiante aún no ha votado")
 
-                        #dentro del proceso de votacion debo buscar cada candidato, y verificar si existe con el que se está ingresando
-                        for busqueda_candidato in busqueda_proceso_votacion:
-                            candidato_existente = busqueda_candidato.candidato_seleccionado
-                            print(f"id candidato que existe dentro de el proceso de votacion {busqueda_candidato.id}: ", candidato_existente)
-                            print(f"id candidato que estoy ingresando dentro de el proceso de votacion {busqueda_candidato.id}: ", rec_candidatos.name)
-                            #aqui valido si el candidato que busco ya existe o es igual que estoy intentando guardar
-                            #si es asi entonces actualizo
-                            if candidato_existente == rec_candidatos.name:
-                                bandera = True
-                                valor_del_voto = busqueda_candidato.votos
-                                print("de cuanto es el valor del voto: ", valor_del_voto)
-                                valor_del_voto = int(valor_del_voto) + voto
-                                print("actualiza el valor del voto actualizado: ", valor_del_voto)
+                        # cambiar el estado de su voto
+                        payload_voto = {
+                           'voto_realizado': 'si',
+                        }
+                        busqueda_estudiante.write(payload_voto)
 
-                                payload_registro['votos'] = valor_del_voto
-                                busqueda_candidato.write(payload_registro)
+                        payload_registro = {
+                            'proceso_votacion_seleccionado': procesos_votacion_rec.descripcion,
+                            'candidato_seleccionado': rec_candidatos.name,
+                            'votos': voto,
+                            'proceso_votacion_seleccionado_objeto': procesos_votacion_rec.id,
+                            'foto_candidato': foto_candidato
+                        }
 
-                                print("esto quiere decir que el candidato existe, actualiza el valor del voto, en este caso aumenta el valor del voto!!")
+                        #ya hay una votacion creada con este proceso de votacion
+                        # (esto me trae entonces una lista de id con todos los registros que tienen esa mismo proceso de votacion)
+                        if busqueda_proceso_votacion:
+
+                            #dentro del proceso de votacion debo buscar cada candidato, y verificar si existe con el que se está ingresando
+                            for busqueda_candidato in busqueda_proceso_votacion:
+                                candidato_existente = busqueda_candidato.candidato_seleccionado
+                                print(f"id candidato que existe dentro de el proceso de votacion {busqueda_candidato.id}: ", candidato_existente)
+                                print(f"id candidato que estoy ingresando dentro de el proceso de votacion {busqueda_candidato.id}: ", rec_candidatos.name)
+                                #aqui valido si el candidato que busco ya existe o es igual que estoy intentando guardar
+                                #si es asi entonces actualizo
+                                if candidato_existente == rec_candidatos.name:
+                                    bandera = True
+                                    valor_del_voto = busqueda_candidato.votos
+                                    print("de cuanto es el valor del voto: ", valor_del_voto)
+                                    valor_del_voto = int(valor_del_voto) + voto
+                                    print("actualiza el valor del voto actualizado: ", valor_del_voto)
+
+                                    payload_registro['votos'] = valor_del_voto
+                                    busqueda_candidato.write(payload_registro)
+
+                                    print("esto quiere decir que el candidato existe, actualiza el valor del voto, en este caso aumenta el valor del voto!!")
+                                    return http.request.render('ges_votaciones.voto_exitoso', {})
+
+                            if not bandera:
+                                request.env['registro.votos'].sudo().create(payload_registro)
+                                #si no existe entonces crea el candidato
+                                print("esto quiere decir que el candidato NO existe, lo crea y registra el valor del voto en 1!!")
                                 return http.request.render('ges_votaciones.voto_exitoso', {})
 
-                        if not bandera:
+                        #no hay nadie que haya votado por este proceso de votacion:
+                        else:
                             request.env['registro.votos'].sudo().create(payload_registro)
-                            #si no existe entonces crea el candidato
-                            print("esto quiere decir que el candidato NO existe, lo crea y registra el valor del voto en 1!!")
+                            #crea el nuevo proceso de votacion con el candidato
+                            print("esto quiere decir que no hay un proceso de votacion, asi que lo crea , y lo crea con un solo voto , osea voto=1 !!!")
                             return http.request.render('ges_votaciones.voto_exitoso', {})
-
-                    #no hay nadie que haya votado por este proceso de votacion:
                     else:
-                        request.env['registro.votos'].sudo().create(payload_registro)
-                        #crea el nuevo proceso de votacion con el candidato
-                        print("esto quiere decir que no hay un proceso de votacion, asi que lo crea , y lo crea con un solo voto , osea voto=1 !!!")
-                        return http.request.render('ges_votaciones.voto_exitoso', {})
-                else:
-                    print("el estudiante ya votó")
-                    return http.request.render('ges_votaciones.estudiante_ha_votado', {})
+                        print("el estudiante ya votó")
+                        return http.request.render('ges_votaciones.estudiante_ha_votado', {})
 
-            print("sigo buscando el id...")
+                print("sigo buscando el id...")
+        elif estado_proceso == 'cerrada':
+            print("el proceso de votación se encuentra cerrado")
+            return http.request.render('ges_votaciones.proceso_votación_cerrado', {})
+        else:
+            print("el proceso de votación se encuentra cerrado")
+            return http.request.render('ges_votaciones.proceso_votación_en_borrador', {})
 
             #luego aqui valido si ese id del candidato que acaba de encontrar es igual al id que selecciono en el formulario
             #si son iguales entonces puede registrar el voto, si no es igual entonces no podra votar, y debe seguir buscando

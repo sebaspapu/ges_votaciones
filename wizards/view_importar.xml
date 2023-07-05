@@ -17,6 +17,7 @@
                             <group>
                                 <div><h4 class="card-title text-center">Descargar Template De Ejemplo:</h4></div>
                                  <group><button name="action_download_archivo" type="object" string="Descargar Plantilla" class="btn-secondary"/></group>
+                                <div><h6>Ruta de descarga: ges_votaciones\static\download\</h6></div>
                             </group>
                         </group>
                     </sheet>

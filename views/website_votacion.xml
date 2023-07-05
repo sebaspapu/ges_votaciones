@@ -103,6 +103,58 @@
             </field>
         </record>
 
+        <!--El proceso de votación se encuentra cerrado-->
+        <record id="proceso_votación_cerrado" model="website.page">
+            <field name="name">Proceso votación cerrado</field>
+            <field name="type">qweb</field>
+            <field name="website_published">True</field>
+            <field name="key">ges_votaciones.proceso_votación_cerrado</field>
+            <field name="arch" type="xml">
+                <t name="Valido" t-name="ges_votaciones.proceso_votación_cerrado">
+                    <t t-call="website.layout">
+                        <div id="wrap">
+                            <div class="container">
+                                <h5><br/>¡VOTACIÓN INCOMPLETA!</h5>
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div class="alert alert-warning" role="status">
+                                            ¡El proceso de votación se encuentra cerrado!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </field>
+        </record>
+
+        <!--El proceso de votación esta en borrador, sin iniciar-->
+        <record id="proceso_votación_en_borrador" model="website.page">
+            <field name="name">Proceso votación sin iniciar</field>
+            <field name="type">qweb</field>
+            <field name="website_published">True</field>
+            <field name="key">ges_votaciones.proceso_votación_en_borrador</field>
+            <field name="arch" type="xml">
+                <t name="Valido" t-name="ges_votaciones.proceso_votación_en_borrador">
+                    <t t-call="website.layout">
+                        <div id="wrap">
+                            <div class="container">
+                                <h5><br/>¡VOTACIÓN INCOMPLETA!</h5>
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div class="alert alert-warning" role="status">
+                                            ¡El proceso de votación se encuentra en borrador, sin iniciar!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </field>
+        </record>
+
 
     </data>
 </odoo>

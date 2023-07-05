@@ -16,10 +16,13 @@
       <field name="model">sedes.universidad</field>
       <field name="arch" type="xml">
         <tree editable="bottom">
-            <field name="create_date"/>
-          <field name="nombre_sede"/>
-            <field name="ubicacion_sede"/>
-          <field name="universidad_principal"/>
+            <field name="id" invisible="1"/>
+          <field name="create_date" string="Fecha de Registro Sede"/>
+          <field name="nombre_sede" />
+          <field name="ubicacion_sede"/>
+          <field name="fecha_inicio"/>
+          <field name="fecha_fin"/>
+          <field name="universidad_principal" readonly="1"/>
         </tree>
       </field>
     </record>
@@ -44,7 +47,7 @@
             </field>
             <field name="carrera_del_estudiante" position="after">
                 <field name="sede_estudio_del_estudiante"
-                       attrs="{'invisible': [('tipo_persona', '=', 'candidato')]}">
+                       attrs="{'invisible': [('tipo_persona', '=', 'candidato')],'required': [('tipo_persona','=', 'estudiante')]}">
                 </field>
             </field>
             <field name="sede_estudio_del_estudiante" position="after">
@@ -52,12 +55,6 @@
                        readonly="1" attrs="{'invisible': [('tipo_persona', '=', 'candidato')]}">
                 </field>
             </field>
-            <!--
-            <field name="sede_estudio_del_estudiante" position="after">
-                <field name="votos"
-                       attrs="{'invisible': [('tipo_persona', '=', 'estudiante')]}">
-                </field>
-            </field>-->
             <notebook>
                 <page string="Mis Procesos de Votación">
                     <field name="votos" attrs="{'invisible': [('tipo_persona', '=', 'estudiante')]}" readonly="1">

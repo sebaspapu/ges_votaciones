@@ -9,7 +9,7 @@
             <field name="model">registro.votos</field>
             <field name="arch" type="xml">
                 <tree >
-                    <field name="id"/>
+                    <field name="id" invisible="1"/>
                     <field name="proceso_votacion_seleccionado_objeto" invisible="1"/>
                     <field name="proceso_votacion_seleccionado"/>
                     <field name="candidato_seleccionado"/>
@@ -40,7 +40,7 @@
             <field name="model">registro.votos</field>
             <field name="arch" type="xml">
                 <search string="Busqueda por grupos">
-                    <field name="id"/>
+                    <field name="id" invisible="1"/>
                     <field name="proceso_votacion_seleccionado_objeto" invisible="1"/>
                     <field name="proceso_votacion_seleccionado"/>
                     <field name="candidato_seleccionado"/>
@@ -77,7 +77,7 @@
 
         <!-- actions -->
 
-        <menuitem name="Votos" id="registro_votos_menu_2" parent="votaciones_universidad"
+        <menuitem name="Estadisticas Votos" id="registro_votos_menu_2" parent="votaciones_universidad"
                   action="registro_votos_action_window" sequence="1"/>
 
     </data>

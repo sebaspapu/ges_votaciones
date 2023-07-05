@@ -59,12 +59,14 @@ class ImportWizard(models.TransientModel):
         # Itero sobre las filas del DataFrame
         for index, row in df.iterrows():
             # Obtengo los valores de las columnas del archivo excel
+            nombre_sede = row['Nombre_sede']
             descripcion = row['Descripcion']
             fecha_inicio = row['Fecha_inicio']
             fecha_fin = row['Fecha_fin']
 
             # Creo la votación en el modelo proceso.votaciones
             self.env['proceso.votaciones'].create({
+                'sede_estudio_del_estudiante': nombre_sede,
                 'descripcion': descripcion,
                 'fecha_inicio': fecha_inicio,
                 'fecha_fin': fecha_fin,

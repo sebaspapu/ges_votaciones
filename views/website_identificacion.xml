@@ -193,5 +193,57 @@
             </field>
         </record>
 
+        <!--Validacion NO exitosa - No se permite una votación fuera del rango de fechas de la sede asociada -->
+        <record id="sede_fuera_de_rango_finalizada" model="website.page">
+            <field name="name">Votación finalizada en la sede asociada</field>
+            <field name="type">qweb</field>
+            <field name="website_published">True</field>
+            <field name="key">ges_votaciones.sede_fuera_de_rango_finalizada</field>
+            <field name="arch" type="xml">
+                <t name="Valido" t-name="ges_votaciones.sede_fuera_de_rango_finalizada">
+                    <t t-call="website.layout">
+                        <div id="wrap">
+                            <div class="container">
+                                <h5><br/>¡Periodo de votaciones finalizado!</h5>
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div class="alert alert-warning" role="status">
+                                            ¡Lo sentimos, la sede de la universidad a la cual pertenece usted ya finalizó con el periodo de votaciones!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </field>
+        </record>
+
+        <!--Validacion NO exitosa - No se permite una votación fuera del rango de fechas de la sede asociada -->
+        <record id="sede_fuera_de_rango_sin_iniciar" model="website.page">
+            <field name="name">Votación sin iniciar en la sede asociada</field>
+            <field name="type">qweb</field>
+            <field name="website_published">True</field>
+            <field name="key">ges_votaciones.sede_fuera_de_rango_sin_iniciar</field>
+            <field name="arch" type="xml">
+                <t name="Valido" t-name="ges_votaciones.sede_fuera_de_rango_sin_iniciar">
+                    <t t-call="website.layout">
+                        <div id="wrap">
+                            <div class="container">
+                                <h5><br/>¡Periodo de votaciones sin iniciar!</h5>
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div class="alert alert-warning" role="status">
+                                            ¡Lo sentimos, la sede de la universidad a la cual pertenece usted aún no ha iniciado periodo de votaciones!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </field>
+        </record>
+
     </data>
 </odoo>

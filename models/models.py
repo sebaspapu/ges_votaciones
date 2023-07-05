@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
+from datetime import timedelta, datetime
 
-#manejo de errores:
+# manejo de excepciones
 from odoo.exceptions import AccessError, MissingError, ValidationError
 
 #heredo de res config settings
@@ -11,7 +12,6 @@ class ResConfigSettings(models.TransientModel):
 
     creador = fields.Char(string=' ', config_parameter='ges_votaciones.creador',
                        default='Sebastian Bolaños Morales', readonly=True)
-
 
 # crear sedes de la universidad
 class SedesUniversidad(models.Model):
@@ -24,6 +24,14 @@ class SedesUniversidad(models.Model):
     ubicacion_sede = fields.Many2one('res.country', string="Ubicación")
     universidad_principal = fields.Char(string="Universidad", default='UNIACME')
 
+    fecha_inicio = fields.Datetime(string='Inicio Procesos de Votación', required=True)
+    fecha_fin = fields.Datetime(string='Fin Procesos de Votación', required=True)
+
+    @api.constrains('fecha_inicio', 'fecha_fin')
+    def date_constrains(self):
+        for rec in self:
+            if rec.fecha_fin < rec.fecha_inicio:
+                raise ValidationError('Lo sentimos, la fecha final debe ser mayor que la fecha de inicio')
 
 # crear estudiantes y candidatos ( heredando de res.partner)
 class EstudiantesYCandidatosUniversidad(models.Model):
@@ -34,7 +42,7 @@ class EstudiantesYCandidatosUniversidad(models.Model):
     sede_estudio_del_estudiante = fields.Many2one('sedes.universidad', string='Sede de Estudio',
                                                   domain="[('ubicacion_sede', '=', country_name)]")
     country_name = fields.Integer(string='Nombre del País', related='country_id.id', readonly=True)
-    country_id = fields.Many2one(required=True)
+    country_id = fields.Many2one(required=True, default=49)
     vat = fields.Char("Número de Identificación Custom", required=True)
     tipo_persona = fields.Selection([
         ('estudiante', 'Estudiante'),
@@ -69,76 +77,3 @@ class EstudiantesYCandidatosUniversidad(models.Model):
             print("candidato: ",contacto,"candidato existente: ", contacto_existente)
             if contacto_existente:
                 raise ValidationError("Ya existe una persona con el mismo número de identificación.")
-
-# crear los procesos de votaciones
-class ProcesoVotaciones(models.Model):
-    _name = 'proceso.votaciones'
-    _description = 'Proceso de Votación'
-    _rec_name = 'descripcion'
-
-    # Campos de la votación
-    descripcion = fields.Text(string='Descripción')
-    fecha_inicio = fields.Datetime(string='Fecha de Inicio')
-    fecha_fin = fields.Datetime(string='Fecha de Fin')
-    # le paso los candidatos a traves de un campo Many2many, ya que una Votacion puede tener muchos candidatos, y un candidato puede estar en muchas Votaciones
-    candidatos = fields.Many2many('res.partner', string='Candidatos', domain=[('tipo_persona', '=', 'candidato')])
-    #cantidad_votos = fields.Integer(string='Cantidad de Votos')#, compute='_compute_cantidad_votos')
-    #foto_candidato = fields.Binary(string='Foto del Candidato') # la foto del candidato hay que traerla tambien de acuerdo al candidato que se seleccione ARREGLAR
-    estado = fields.Selection([
-        ('borrador', 'Borrador'),
-        ('en_proceso', 'En Proceso'),
-        ('cerrada', 'Cerrada')
-    ], string='Estado', default='borrador')
-
-    # Relación One2many con el modelo 'registro.votos'
-    votos_registrados = fields.One2many('registro.votos', 'proceso_votacion_seleccionado_objeto', string='Votos Registrados')
-
-    #votacion iniciada o en proceso, posterior a cuando se ha creado
-    def votacion_en_proceso(self):
-        registros=0
-        for record in self:
-            if record.estado == 'borrador':
-                record.estado = 'en_proceso'
-                registros= registros + 1
-        notificacion='Votaciones en proceso '+str(registros)
-        print(notificacion)
-
-    #votacion finalizada o cerrada, posterior a cuando se ha iniciado
-    def votacion_cerrada(self):
-        registros = 0
-        for record in self:
-            if record.estado == 'en_proceso':
-                record.estado = 'cerrada'
-                registros = registros + 1
-        notificacion = 'Votaciones cerradas ' + str(registros)
-        print(notificacion)
-
-    #votacion en borrador, posterior a ser cerrada o iniciada
-    def votacion_en_borrador(self):
-        registros = 0
-        for record in self:
-            if record.estado == 'en_proceso' or record.estado == 'cerrada':
-                record.estado = 'borrador'
-                registros = registros + 1
-        notificacion = 'Votaciones en borrador ' + str(registros)
-        print(notificacion)
-
-    #boton que inicia la accion que contiene ejecuta la vista del wizard
-    #def abrir_wizard_importacion(self):
-    #    view_id = self.env.ref('ges_votaciones.action_wizard_importar')
-    #    action = view_id.read()[0]
-    #    return action
-
-# modelo para registrar los votos
-class registro_votos(models.Model):
-    _name = 'registro.votos'
-    _description = 'Registrar Votos'
-
-    #conexion con modelo proceso.votaciones
-    proceso_votacion_seleccionado_objeto = fields.Many2one('proceso.votaciones', string="contiene el objeto proceso_votacion")
-
-    proceso_votacion_seleccionado = fields.Char(string='Proceso de Votacion Seleccionado')
-    candidato_seleccionado = fields.Char(string='Candidato Seleccionado')
-    votos = fields.Integer(string='Cantidad de Votos')
-    foto_candidato = fields.Binary(string='Foto del Candidato')
-
