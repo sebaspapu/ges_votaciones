@@ -9,7 +9,7 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-4 col-md-6">
                             <div class="card mt-5">
-                                <div class="card-body">
+                                <div class="card-body"><br/>
                                     <t t-foreach='busqueda_num_id_rec' t-as="busqueda_num_id">
                                         <h5 class="card-title text-center">¡BIENVENIDO ESTUDIANTE <br/><t t-esc='busqueda_num_id.name'/>!</h5>
                                     </t>
@@ -42,12 +42,13 @@
                                         <div class="text-center"><br/>
                                             <button type="submit" class="btn btn-primary">Finalizar votación</button>
                                         </div>
-                                    </form>
+                                    </form><br/>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <link rel="stylesheet" type="text/css" href="/ges_votaciones/static/src/css/custom-css.css"/>
             </t>
         </template>
 

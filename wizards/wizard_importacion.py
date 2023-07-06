@@ -24,16 +24,16 @@ class ImportWizard(models.TransientModel):
 
         with open(file_path, 'r') as file:
             reader = csv.DictReader(file)
-            print("lectura del archivo: ", reader)
+            #print("lectura del archivo: ", reader)
             for row in reader:
-                print("row: ", row)
+                #print("row: ", row)
 
                 descripcion = row['descripcion']
-                print("descripcion: ", descripcion)
+                #print("descripcion: ", descripcion)
                 fecha_inicio = row['fecha_inicio']
-                print("fecha_inicio: ", fecha_inicio)
+                #print("fecha_inicio: ", fecha_inicio)
                 fecha_fin = row['fecha_fin']
-                print("fecha_fin: ", fecha_fin)
+                #print("fecha_fin: ", fecha_fin)
 
                 votacion = self.env['proceso.votaciones'].create({
                     'descripcion': descripcion,
@@ -41,7 +41,7 @@ class ImportWizard(models.TransientModel):
                     'fecha_fin': fecha_fin,
                     'estado': 'borrador'
                 })
-                print("votacion: ", votacion)
+                #print("votacion: ", votacion)
 
         return {'type': 'ir.actions.act_window_close'}
 
@@ -78,7 +78,7 @@ class ImportWizard(models.TransientModel):
     def action_download_archivo(self):
 
         module_path = get_module_resource('ges_votaciones','static/document/Plantilla_Proceso_de_Votación.xlsx')
-        print("module path: ", module_path)
+        #print("module path: ", module_path)
 
         # Descargar el archivo desde la ubicación actual del módulo
         file_data = open(module_path, 'rb').read()

@@ -34,6 +34,7 @@
                         </div>
                     </div>
                 </div>
+                <link rel="stylesheet" type="text/css" href="/ges_votaciones/static/src/css/custom-css.css"/>
             </t>
         </template>
 

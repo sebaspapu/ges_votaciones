@@ -61,7 +61,7 @@ class EstudiantesYCandidatosUniversidad(models.Model):
     def _onchange_country_id(self):
         for rec in self:
             if rec.country_id:
-                print("nombre del pais: ",rec.country_id.name)
+                #print("nombre del pais: ",rec.country_id.name)
                 rec.country_name = rec.country_id.id
             else:
                 rec.country_name = False
@@ -74,6 +74,6 @@ class EstudiantesYCandidatosUniversidad(models.Model):
             #intentando crear un nuevo contacto, ya que el id es diferente
             contacto_existente = self.env['res.partner'].search(
                 [('vat', '=', contacto.vat), ('id', '!=', contacto.id)])
-            print("candidato: ",contacto,"candidato existente: ", contacto_existente)
+            #print("candidato: ",contacto,"candidato existente: ", contacto_existente)
             if contacto_existente:
                 raise ValidationError("Ya existe una persona con el mismo número de identificación.")
