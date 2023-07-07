@@ -66,14 +66,11 @@ class EstudiantesYCandidatosUniversidad(models.Model):
             else:
                 rec.country_name = False
 
+    #se valida si el numero de identidad ya existe
     @api.constrains('vat')
     def _verificar_numero_identidad(self):
         for contacto in self:
-            #busca si el numero vat ingresado se encuentra dentro de de los registros ya existentes,
-            #busca y compara el id del nuevo registro con el que ya existe, y si verifica que es diferente, quiere decir que se está
-            #intentando crear un nuevo contacto, ya que el id es diferente
             contacto_existente = self.env['res.partner'].search(
                 [('vat', '=', contacto.vat), ('id', '!=', contacto.id)])
-            #print("candidato: ",contacto,"candidato existente: ", contacto_existente)
             if contacto_existente:
                 raise ValidationError("Ya existe una persona con el mismo número de identificación.")

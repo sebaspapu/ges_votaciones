@@ -6,7 +6,7 @@
 
     'description': """
         Permite gestionar y administrar un sistema de votaciones para diferentes sedes de una Universidad,
-        Los Estudiantes ingresan a traves de un portal web, y realizan todo el proceso de votación.""",
+        Los Estudiantes ingresan a traves del portal web, y realizan todo el proceso de votación.""",
 
     'author': "Sebastián Bolaños Morales",
     'website': "https://github.com/sebaspapu",

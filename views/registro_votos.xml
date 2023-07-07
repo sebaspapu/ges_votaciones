@@ -27,14 +27,13 @@
             <field name="arch" type="xml">
                 <pivot string="Analisis de Estadisticas - Votos Por Candidato" sample="1">
                     <field name="proceso_votacion_seleccionado" type="row"/>
-                    <field name="candidato_seleccionado" interval="day" type="row"/><!-- validar lo del interval-->
+                    <field name="candidato_seleccionado" interval="day" type="row"/>
                     <field name="votos" type="measure"/>
                 </pivot>
             </field>
         </record>
 
-        <!-- vista search registro votos -->
-        <!-- ==================== vista de busqueda, para agrupaciones ====================-->
+        <!-- vista de busqueda, para agrupaciones -->
         <record id="agrupacion_registro_votos_search" model="ir.ui.view">
             <field name="name">Agrupación Registro de Votos - view search</field>
             <field name="model">registro.votos</field>
@@ -73,9 +72,7 @@
 
         <!-- menu categories -->
 
-        <!--<menuitem name="Votaciones" id="votaciones_universidad" parent="menu_main_gestor_votaciones" sequence="1"/>-->
-
-        <!-- actions -->
+        <!-- menuitem -->
 
         <menuitem name="Estadisticas Votos" id="registro_votos_menu_2" parent="votaciones_universidad"
                   action="registro_votos_action_window" sequence="1"/>

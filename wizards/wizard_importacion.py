@@ -24,16 +24,11 @@ class ImportWizard(models.TransientModel):
 
         with open(file_path, 'r') as file:
             reader = csv.DictReader(file)
-            #print("lectura del archivo: ", reader)
             for row in reader:
-                #print("row: ", row)
 
                 descripcion = row['descripcion']
-                #print("descripcion: ", descripcion)
                 fecha_inicio = row['fecha_inicio']
-                #print("fecha_inicio: ", fecha_inicio)
                 fecha_fin = row['fecha_fin']
-                #print("fecha_fin: ", fecha_fin)
 
                 votacion = self.env['proceso.votaciones'].create({
                     'descripcion': descripcion,
@@ -41,7 +36,6 @@ class ImportWizard(models.TransientModel):
                     'fecha_fin': fecha_fin,
                     'estado': 'borrador'
                 })
-                #print("votacion: ", votacion)
 
         return {'type': 'ir.actions.act_window_close'}
 
@@ -53,10 +47,10 @@ class ImportWizard(models.TransientModel):
         })
         file_path = attachment._full_path(attachment.store_fname)
 
-        # Aqui leo el archivo Excel con la libreria pandas
+        # aqui leo el archivo Excel con la libreria pandas
         df = pd.read_excel(file_path)
 
-        # Itero sobre las filas del DataFrame
+        # itero sobre las filas del DataFrame
         for index, row in df.iterrows():
             # Obtengo los valores de las columnas del archivo excel
             nombre_sede = row['Nombre_sede']
@@ -64,7 +58,7 @@ class ImportWizard(models.TransientModel):
             fecha_inicio = row['Fecha_inicio']
             fecha_fin = row['Fecha_fin']
 
-            # Creo la votación en el modelo proceso.votaciones
+            # creo la votación en el modelo proceso.votaciones
             self.env['proceso.votaciones'].create({
                 'sede_estudio_del_estudiante': nombre_sede,
                 'descripcion': descripcion,
@@ -80,14 +74,14 @@ class ImportWizard(models.TransientModel):
         module_path = get_module_resource('ges_votaciones','static/document/Plantilla_Proceso_de_Votación.xlsx')
         #print("module path: ", module_path)
 
-        # Descargar el archivo desde la ubicación actual del módulo
+        # descargar el archivo desde la ubicación actual del módulo
         file_data = open(module_path, 'rb').read()
 
         module_path_2 = get_module_resource('ges_votaciones','static','download')
 
-        file_name = 'plantilla_ejemplo.xlsx'  # Nombre del archivo descargado
+        file_name = 'plantilla_ejemplo.xlsx'  # nombre del archivo descargado
 
-        # Guardar el archivo en la ubicación deseada
+        # guardar el archivo en la ubicación deseada
         with open(os.path.join(module_path_2, file_name), 'wb') as f:
             f.write(file_data)
 
